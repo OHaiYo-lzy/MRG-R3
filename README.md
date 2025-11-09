@@ -4,7 +4,7 @@ Code for MRG-R3: Retrieval-Reflection-Reward via Multimodal LLMs Advances Clinic
 ##  Installation Guide
 To install using pip:
 ```shell
-pip install ms-swift -U
+pip install -r requirements.txt
 ```
 
 To install from source:
@@ -14,6 +14,8 @@ To install from source:
 cd ms-swift
 pip install -e .
 ```
+
+
 
 Running Environment:
 
@@ -38,24 +40,27 @@ Download Qwen2.5-VL-7B model from [ModelScope](https://modelscope.cn/models/Qwen
 
 ### Command Line Interface
 - Here, `--adapters` should be replaced with the checkpoint folder. 
+- modal can be `us` or `xray`
 
 ```shell
-# Using an interactive command line for ultrasound inference.
+# Using an interactive command line for inference.
 CUDA_VISIBLE_DEVICES=0,1 \
 swift infer \
     --model Qwen/Qwen2.5-VL-7B-Instruct \
-    --adapters data/checkpoints/us \
+    --adapters data/checkpoints/modal \
+    --val_dataset data/example_data/modal/samples.json \
     --load_args false \
     --temperature 0 \
     --max_new_tokens 2048 \
     --system "You are a helpful assistant."
 
 
-# merge-lora and use vLLM for xray inference acceleration
+# merge-lora and use vLLM for inference acceleration
 CUDA_VISIBLE_DEVICES=0,1 \
 swift infer \
     --model Qwen/Qwen2.5-VL-7B-Instruct \
-    --adapters data/checkpoints/xray \
+    --adapters data/checkpoints/modal \
+    --val_dataset data/example_data/modal/samples.json \
     --load_args false \
     --merge_lora true \
     --infer_backend vllm \
@@ -64,6 +69,7 @@ swift infer \
     --max_new_tokens 2048 \
     --system "You are a helpful assistant."
 ```
+
 
 ## 🏛 License
 
