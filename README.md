@@ -1,14 +1,6 @@
 # MRG-R3
 Code for MRG-R3: Retrieval-Reflection-Reward via Multimodal LLMs Advances Clinical Automated Medical Report Generation
 
-## Overview
-
-## System Requirements
-### Hardware requirements
-### Software requirements
-### Python Dependencies
-
-
 ##  Installation Guide
 To install using pip:
 ```shell
@@ -42,29 +34,37 @@ Running Environment:
 
 ## Quick Start
 
+Download Qwen2.5-VL-7B model from [ModelScope](https://modelscope.cn/models/Qwen/Qwen2.5-VL-7B-Instruct) or [HuggingFace](https://huggingface.co/Qwen/Qwen2.5-VL-7B-Instruct), and replace the path in adapter_config.json to your local path.
+
 ### Command Line Interface
 - Here, `--adapters` should be replaced with the checkpoint folder. 
-- Since the adapters folder contains the training parameter file `args.json`, there is no need to specify `--model`, `--system` separately; Swift will automatically read these parameters. To disable this behavior, you can set `--load_args false`.
 
 ```shell
-# Using an interactive command line for inference.
-CUDA_VISIBLE_DEVICES=0 \
+# Using an interactive command line for ultrasound inference.
+CUDA_VISIBLE_DEVICES=0,1 \
 swift infer \
-    --adapters output/vx-xxx/checkpoint-xxx \
+    --model Qwen/Qwen2.5-VL-7B-Instruct \
+    --adapters data/checkpoints/us \
+    --load_args false \
     --temperature 0 \
-    --max_new_tokens 2048
+    --max_new_tokens 2048 \
+    --system "You are a helpful assistant."
 
-# merge-lora and use vLLM for inference acceleration
-CUDA_VISIBLE_DEVICES=0 \
+
+# merge-lora and use vLLM for xray inference acceleration
+CUDA_VISIBLE_DEVICES=0,1 \
 swift infer \
-    --adapters output/vx-xxx/checkpoint-xxx \
+    --model Qwen/Qwen2.5-VL-7B-Instruct \
+    --adapters data/checkpoints/xray \
+    --load_args false \
     --merge_lora true \
     --infer_backend vllm \
     --max_model_len 8192 \
     --temperature 0 \
-    --max_new_tokens 2048
+    --max_new_tokens 2048 \
+    --system "You are a helpful assistant."
 ```
 
 ## 🏛 License
 
-This framework is licensed under the [Apache License (Version 2.0)](https://github.com/modelscope/modelscope/blob/master/LICENSE). For models and datasets, please refer to the original resource page and follow the corresponding License.
+This framework is licensed under the [Apache License (Version 2.0)](https://github.com/modelscope/modelscope/blob/master/LICENSE). 
