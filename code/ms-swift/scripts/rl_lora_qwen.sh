@@ -1,0 +1,36 @@
+export MAX_PIXELS=262144
+export MASTER_PORT=27500
+swift rlhf \
+    --rlhf_type grpo \
+    --model /path/to/sft-checkpoint-merged \
+    --external_plugins examples/train/grpo/plugin/plugin.py \
+    --reward_funcs external_radgraph external_hybridNLG \
+    --dataset /path/to/processed_datafile.jsonl \
+    --multi_turn check_medical_report_and_reflect_multi_turn \
+    --train_type lora \
+    --lora_rank 8 \
+    --lora_alpha 32 \
+    --target_modules all-linear \
+    --torch_dtype bfloat16 \
+    --max_completion_length 1024 \
+    --num_train_epochs 3 \
+    --per_device_train_batch_size 16 \
+    --per_device_eval_batch_size 16 \
+    --learning_rate 2e-5 \
+    --gradient_accumulation_steps 1 \
+    --eval_steps 200 \
+    --save_steps 1000 \
+    --save_total_limit 20 \
+    --logging_steps 5 \
+    --max_length 2048 \
+    --output_dir output_rl \
+    --warmup_ratio 0.05 \
+    --dataloader_num_workers 8 \
+    --dataset_num_proc 8 \
+    --num_generations 16 \
+    --temperature 0.5 \
+    --epsilon_high 0.28 \
+    --dynamic_sample true \
+    --max_resample_times 3 \
+    --deepspeed zero2 \
+    --log_completions true
